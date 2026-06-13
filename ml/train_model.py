@@ -56,6 +56,7 @@ def clean_data(df):
     df["Temperature"] = df["Temperature"].interpolate().bfill().ffill()
     df["Humidity"] = df["Humidity"].interpolate().bfill().ffill()
     df["WindSpeed"] = df["WindSpeed"].interpolate().bfill().ffill()
+   
 
     df["TotalPowerConsumption"] = df[power_columns].sum(axis=1)
 
@@ -101,7 +102,7 @@ def train_model():
     df = create_features(df)
 
     feature_columns = [
-    "Temperature", "Humidity", "WindSpeed",
+    "Temperature", "Humidity", "WindSpeed", 
     "hour", "minute", "day_of_week", "month", "day_of_year",
     "block", "is_weekend", "is_holiday", "sin_block", "cos_block",
     "lag_1", "lag_6", "lag_144", "rolling_6_mean", "rolling_144_mean",
@@ -133,6 +134,30 @@ def train_model():
     r2 = r2_score(y_test, predictions)
 
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
+
+    importance = pd.DataFrame({
+    "feature": feature_columns,
+    "importance": model.feature_importances_
+})
+
+    importance = importance.sort_values(
+    by="importance",
+    ascending=False
+)
+
+    importance.to_csv(
+    MODEL_DIR / "feature_importance.csv",
+    index=False
+)
+
+    joblib.dump(
+    {
+        "model": model,
+        "feature_columns": feature_columns,
+        "last_rows": df.tail(200),
+    },
+    MODEL_PATH,
+)
 
     joblib.dump(
         {

@@ -13,15 +13,24 @@ router.get("/", async (req, res) => {
 
     const data = response.data;
 
+    // res.json({
+    //   location: "Dhanbad, Jharkhand",
+    //   source: "OpenWeatherMap API",
+    //   temperature: data.main.temp,
+    //   humidity: data.main.humidity,
+    //   windSpeed: data.wind.speed,
+    //   cloudCover: data.clouds.all,
+    // });
     res.json({
       location: "Dhanbad, Jharkhand",
       source: "OpenWeatherMap API",
+      lastUpdated: new Date().toISOString(),
       temperature: data.main.temp,
       humidity: data.main.humidity,
       windSpeed: data.wind.speed,
       cloudCover: data.clouds.all,
-    });
-  } catch (error) {
+});
+} catch (error) {
   console.error(error.response?.data || error.message);
 
   res.status(500).json({
