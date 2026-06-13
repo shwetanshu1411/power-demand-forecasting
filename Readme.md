@@ -391,10 +391,4 @@ http://localhost:5001/api/health
 
 ---
 
-## Author
 
-Shwetanshu Kumar
-
-Data Developer Intern Assignment Submission
-
-Exascale Deeptech & AI Pvt. Ltd.
